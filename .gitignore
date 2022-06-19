@@ -1,4 +1,7 @@
+.vscode
+
 venv
+__pycache__
 .ipynb_checkpoints
 *.ipynb
 
@@ -7,3 +10,4 @@ robust-fpm-cmc-msu-edu-2021
 report/*.aux
 report/*.log
 report/*.out
+report/*converted-to.pdf

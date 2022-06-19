@@ -31,30 +31,32 @@ def get_price(starting_price:list[float],
         lattice=Lattice(delta=np.ones_like(starting_price)),
         time_horizon=time_horizon)
     # TODO: Add progress bar to wrap this ugly behaviour with integer iter_tick. 
-    solver = ConvhullSolver(enable_timer=True, ignore_warnings=True, iter_tick=100)
+    solver = ConvhullSolver(ignore_warnings=True, iter_tick=100)
     solution = solver.solve(problem)
     # Lol: The documentation is lying: you can’t derive strategies here in any way.
     # There are two parameters and both are not used in the sources.
     return solution['Vf'][0][0] #, solution['hedge']
 
-#price = get_price([100, 100], 70, [[0.999, 1.001], [0.999, 1.001]], 5)
+#price = get_price([100, 100], 70, [[1.999, 1.001], [0.999, 1.001]], 5)
+
 import time
+from progress.bar import Bar
+
 start_time = time.time()
 
-grid = np.linspace(90, 110, 20)
+grid = np.linspace(90, 110, 2)
 mesh = np.meshgrid(grid, grid)
 prices = np.zeros((grid.size, grid.size))
+bar = Bar('Processing',
+    fill='@',
+    max=grid.size**2,
+    suffix='%(percent)d%% - %(eta)ds')
 
-maximums = {} # Call-on-max depends on max between asset price
 for i in range(grid.size):
     for j in range(grid.size):
-        maximum = max(grid[i], grid[j])
-        if maximum in maximums:
-            prices[i][j] = maximums[maximum]
-            continue
-        price = get_price([mesh[0][i][j], mesh[1][i][j]], 90, [[0.99, 1.01], [0.99, 1.01]], 4)
-        maximums[maximum] = price
+        price = get_price([mesh[0][i][j], mesh[1][i][j]], 100, [[0.97, 1.03], [0.99, 1.01]], 5)
         prices[i][j] = price
+        bar.next()
 print("--- %s seconds ---" % (time.time() - start_time))
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -105,12 +107,13 @@ parula_map = LinearSegmentedColormap.from_list('parula', cm_data)
 fig = plt.figure()
 ax = fig.add_subplot(121, projection='3d')
 ax.plot_surface(mesh[0], mesh[1], prices, cmap=parula_map)
-#plt.contour(grid, grid, prices, 20, cmap=parula_map)
+
 ax = fig.add_subplot(122)
 im = ax.imshow(prices, interpolation='bilinear', origin='lower',
                cmap=parula_map, extent=(grid[0], grid[-1], grid[0], grid[-1]))
+ax.contour(grid, grid, prices, 20, cmap=parula_map)
 fig.colorbar(im)
 
-plt.savefig("mytikz.png")
-tikzplotlib.save("mytikz.tex")
-#plt.show()
+#plt.savefig("mytikz.png")
+#tikzplotlib.save("mytikz.tex")
+plt.show()
