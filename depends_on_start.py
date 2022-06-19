@@ -7,7 +7,7 @@ import os
 from model import get_price
 from utils import parula_map
 
-data_file_name = 'depends_on_start.npy'
+data_file_name = 'depends_on_start_1.npy'
 grid = np.linspace(90, 110, 10)
 mesh = np.meshgrid(grid, grid)
 
@@ -19,7 +19,7 @@ def get_data():
 
     for i in range(grid.size):
         for j in range(grid.size):
-            price = get_price([mesh[0][i][j], mesh[1][i][j]], 100, [[0.97, 1.03], [0.99, 1.01]], 5)
+            price = get_price([mesh[0][i][j], mesh[1][i][j]], 100, [[0.99, 1.01], [0.99, 1.01]], 5)
             prices[i][j] = price
             bar.next()
 

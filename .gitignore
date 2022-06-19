@@ -10,4 +10,5 @@ robust-fpm-cmc-msu-edu-2021
 report/*.aux
 report/*.log
 report/*.out
+report/*.toc
 report/*converted-to.pdf

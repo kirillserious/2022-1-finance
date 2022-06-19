@@ -19,6 +19,7 @@ def get_price(starting_price:list[float],
     strike:float,
     dynamics_rectangle:list[list[float]],
     time_horizon:int,
+    trading_constraints=NoConstraints,
 ) -> (float, []):
     # TODO: Add starting_price and dinamics_rectangle dimentions check
     option = make_option(option_type='callonmax', strike=np.float32(strike))
