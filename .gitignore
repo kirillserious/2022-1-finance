@@ -1,12 +1,17 @@
+# IDE index files
 .vscode
 
+# Python index files
 venv
 __pycache__
-.ipynb_checkpoints
-*.ipynb
 
+# Third party
 robust-fpm-cmc-msu-edu-2021
 
+# Used for caching prices results
+*.npy
+
+# Latex index files
 report/*.aux
 report/*.log
 report/*.out
